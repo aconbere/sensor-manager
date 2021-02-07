@@ -1,0 +1,5 @@
+arduino-cli core install arduino:avr
+arduino-cli compile --fqbn arduino:avr:nano sensor-manager.ino
+
+https://create.arduino.cc/projecthub/B45i/getting-started-with-arduino-cli-7652a5
+
