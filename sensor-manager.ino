@@ -11,7 +11,7 @@
 
 struct Log {
   uint8_t index;
-  uint16_t entries[10];
+  uint16_t entries[256];
 };
 
 uint8_t Log_Append(struct Log *log, long value) {
@@ -57,7 +57,7 @@ void handleResponse(struct Log *log, byte buf[]) {
     high = buf[2];
     value = high << 8 | low;
 
-    Serial.print("Received Volt Response: ");
+    Serial.print("Volts: ");
     Serial.print(value, HEX);
     Serial.print("\n");
 
@@ -90,18 +90,14 @@ void handleResponse(struct Log *log, byte buf[]) {
 }
 
 void loop() {
-  Serial.println("loooooop");
   byte buf[] = {0,0,0};
   int resp = -1;
   
   Wire.beginTransmission(ADDRESS);
-  Serial.println("write volts command");
   Wire.write(COMMAND_VOLTS);
 
-  Serial.println("request 3 bytes");
   Wire.requestFrom(ADDRESS, 3);
 
-  Serial.println("read results");
   resp = readResult(buf);
 
   if (resp < 0) {
@@ -109,10 +105,7 @@ void loop() {
     return;
   }
 
-  Serial.println("handle response");
   handleResponse(&VOLTS, buf);
-
-
   Wire.endTransmission();
-  delay(500);
+  delay(1000);
 }
